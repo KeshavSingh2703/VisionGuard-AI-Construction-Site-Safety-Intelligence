@@ -68,6 +68,9 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         
     - name: Run Tests
+      # Ensure src module is found by adding current directory to PYTHONPATH
+      env:
+        PYTHONPATH: .
       run: |
         # Run actual tests explicitly. If this fails, the build fails.
         # -v: verbose output
