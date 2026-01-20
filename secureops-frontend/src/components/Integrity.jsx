@@ -29,22 +29,25 @@ const Integrity = () => {
 
     if (loading) return <div className="p-8 text-gray-500">Checking system integrity...</div>;
 
-    const StatusRow = ({ label, value, icon: Icon }) => (
-        <div className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-lg mb-3 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-full ${value === 'ok' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
-                    <Icon size={20} />
+    const StatusRow = ({ label, value, icon }) => {
+        const Icon = icon;
+        return (
+            <div className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-lg mb-3 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-full ${value === 'ok' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                        <Icon size={20} />
+                    </div>
+                    <span className="font-medium text-gray-700">{label}</span>
                 </div>
-                <span className="font-medium text-gray-700">{label}</span>
+                <div className="flex items-center gap-2">
+                    <span className={`h-2.5 w-2.5 rounded-full ${value === 'ok' ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`}></span>
+                    <span className={`text-sm font-semibold capitalize ${value === 'ok' ? 'text-green-700' : 'text-red-700'}`}>
+                        {value === 'ok' ? 'Operational' : 'Critical'}
+                    </span>
+                </div>
             </div>
-            <div className="flex items-center gap-2">
-                <span className={`h-2.5 w-2.5 rounded-full ${value === 'ok' ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`}></span>
-                <span className={`text-sm font-semibold capitalize ${value === 'ok' ? 'text-green-700' : 'text-red-700'}`}>
-                    {value === 'ok' ? 'Operational' : 'Critical'}
-                </span>
-            </div>
-        </div>
-    );
+        );
+    };
 
     return (
         <div className="space-y-6">

@@ -2,21 +2,24 @@ import React, { useState, useEffect } from "react";
 import { Upload as UploadIcon, FileText, Image as ImageIcon, Video as VideoIcon, ArrowLeft, Loader2, CheckCircle, XCircle } from "lucide-react";
 import SafetyAPI from "../api";
 
-const SelectionCard = ({ type, icon: Icon, label, desc, limit, onSelect }) => (
-    <button
-        onClick={() => onSelect(type)}
-        className="flex flex-col items-center justify-center p-6 bg-white border-2 border-slate-100 rounded-xl hover:border-blue-500 hover:shadow-md transition-all group text-center"
-    >
-        <div className="p-4 bg-slate-50 rounded-full mb-4 group-hover:bg-blue-50 transition-colors">
-            <Icon className="w-8 h-8 text-slate-600 group-hover:text-blue-600" />
-        </div>
-        <h3 className="font-semibold text-slate-900 mb-1">{label}</h3>
-        <p className="text-sm text-slate-500 mb-2">{desc}</p>
-        <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-1 rounded">
-            Max {limit}
-        </span>
-    </button>
-);
+const SelectionCard = ({ type, icon, label, desc, limit, onSelect }) => {
+    const Icon = icon;
+    return (
+        <button
+            onClick={() => onSelect(type)}
+            className="flex flex-col items-center justify-center p-6 bg-white border-2 border-slate-100 rounded-xl hover:border-blue-500 hover:shadow-md transition-all group text-center"
+        >
+            <div className="p-4 bg-slate-50 rounded-full mb-4 group-hover:bg-blue-50 transition-colors">
+                <Icon className="w-8 h-8 text-slate-600 group-hover:text-blue-600" />
+            </div>
+            <h3 className="font-semibold text-slate-900 mb-1">{label}</h3>
+            <p className="text-sm text-slate-500 mb-2">{desc}</p>
+            <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-1 rounded">
+                Max {limit}
+            </span>
+        </button>
+    );
+};
 
 const UploadView = ({ selectedType, status, error, files, handleBack, handleFileSelect, handleUpload, onUploadComplete, uploadId, setStatus }) => {
     const config = {
