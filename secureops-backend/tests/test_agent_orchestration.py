@@ -1,6 +1,7 @@
 """Tests for LangChain agent orchestration."""
 
 import pytest
+import numpy as np
 from unittest.mock import Mock, patch, MagicMock
 
 from src.agents.agent_factory import AgentFactory
