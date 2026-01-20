@@ -16,6 +16,11 @@ langchain-openai==0.0.2
 openai>=1.6.1,<2.0.0
 tiktoken==0.5.2
 
+# Auth
+python-jose[cryptography]==3.3.0
+passlib[argon2]==1.7.4
+argon2-cffi==23.1.0
+
 # Computer Vision
 torch==2.5.1
 torchvision==0.20.1
