@@ -5,6 +5,7 @@ import numpy as np
 from typing import Tuple, Optional
 from ultralytics import YOLO
 import logging
+from src.core.exceptions import ModelLoadError
 
 logger = logging.getLogger(__name__)
 
@@ -24,9 +25,19 @@ def load_yolo_model(model_path: str, device: str = "auto") -> YOLO:
         model_path = model_name
     
     try:
-        # YOLO will auto-download the model if it doesn't exist locally
-        model = YOLO(model_path)
-        
+        # Defensive loading for Production Stability
+        try:
+            model = YOLO(model_path)
+        except Exception as e:
+            # Check for specific PyTorch 2.6+ weights_only issue or pickle errors
+            err_msg = str(e)
+            if "weights_only" in err_msg or "pickle" in err_msg.lower():
+                 logger.error(f"Review PyTorch version compatibility. Error: {err_msg}")
+                 raise ModelLoadError(
+                     f"Failed to load YOLO model due to pickle/security restriction (weights_only=True?): {err_msg}"
+                 ) from e
+            raise e
+
         # If auto-downloaded, save to the specified path
         if model_file.exists() and model_file.stat().st_size == 0:
             # Model was downloaded to default location, copy it
@@ -44,7 +55,10 @@ def load_yolo_model(model_path: str, device: str = "auto") -> YOLO:
         return model
     except Exception as e:
         logger.error(f"Failed to load YOLO model: {e}")
-        raise
+        # Ensure we always raise a clean ModelLoadError for the orchestrator to handle
+        if isinstance(e, ModelLoadError):
+            raise
+        raise ModelLoadError(f"Failed to load YOLO model: {e}") from e
 
 
 def preprocess_frame(frame: np.ndarray) -> np.ndarray:

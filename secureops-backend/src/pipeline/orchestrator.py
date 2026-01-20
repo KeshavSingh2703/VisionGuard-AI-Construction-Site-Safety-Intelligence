@@ -43,16 +43,16 @@ class PipelineOrchestrator(BaseComponent):
         app_config = get_config()
         
         # Initialize stages
+        self.app_config = app_config # Store config for lazy loading
+        
+        # Initialize stages
         self.video_loader = VideoLoader(app_config.video_processing.dict())
         self.pdf_loader = PDFLoader(app_config.document_processing.dict())
-        self.vision_detector = VisionDetector(app_config.yolo.dict())
         
-        # Phase 3: Explicitly set Pose Model
-        pose_config = app_config.yolo.dict().copy()
-        pose_config["model_path"] = "yolov8n-pose.pt" # Force Pose Model
-        self.pose_estimator = PoseEstimator(pose_config)
-        
-        self.classifier = PPEClassifier(app_config.yolo.dict())
+        # Lazy Load Vision Models (prevent startup crash)
+        self.vision_detector = None
+        self.pose_estimator = None
+        self.classifier = None
         
         self.chunker = DocumentChunker(app_config.document_processing.dict())
         self.embedder = DocumentEmbedder(app_config.embeddings.dict())
@@ -77,6 +77,22 @@ class PipelineOrchestrator(BaseComponent):
         # Visualizer
         self.frame_annotator = FrameAnnotator()
     
+    def _ensure_models_loaded(self):
+        """Lazy load models on demand."""
+        if self.vision_detector is None:
+            logger.info("Lazy loading VisionDetector...")
+            self.vision_detector = VisionDetector(self.app_config.yolo.dict())
+            
+        if self.pose_estimator is None:
+            logger.info("Lazy loading PoseEstimator...")
+            pose_config = self.app_config.yolo.dict().copy()
+            pose_config["model_path"] = "yolov8n-pose.pt"
+            self.pose_estimator = PoseEstimator(pose_config)
+            
+        if self.classifier is None:
+            logger.info("Lazy loading PPEClassifier...")
+            self.classifier = PPEClassifier(self.app_config.yolo.dict())
+
     def reset_state(self):
         """Reset all stateful components for a new job."""
         self.ppe_rules.reset()
@@ -86,6 +102,9 @@ class PipelineOrchestrator(BaseComponent):
         
     def process_video(self, video_path: str, video_id: Optional[str] = None) -> str:
         """Process video/image through detection pipeline."""
+        # Ensure models are loaded
+        self._ensure_models_loaded()
+        
         # Reset state before starting new job
         self.reset_state()
         
