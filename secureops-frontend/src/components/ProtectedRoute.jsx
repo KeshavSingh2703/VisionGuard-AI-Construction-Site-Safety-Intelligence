@@ -1,11 +1,10 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthHooks';
 import { Loader2 } from 'lucide-react';
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
-    const location = useLocation();
 
     if (loading || isAuthenticated === null) {
         return (

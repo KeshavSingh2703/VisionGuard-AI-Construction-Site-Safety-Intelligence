@@ -1,9 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import SafetyAPI, { setAccessToken } from "../api";
-
-const AuthContext = createContext();
-
-export const useAuth = () => useContext(AuthContext);
+import { AuthContext } from "./AuthHooks";
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -16,7 +13,7 @@ export const AuthProvider = ({ children }) => {
             try {
                 // Try to restore session via refresh cookie
                 // This is REQUIRED because access token is memory-only and cleared on reload
-                const refreshData = await SafetyAPI.refreshToken();
+                await SafetyAPI.refreshToken();
                 // Access token is automatically set in api.js by our new refreshToken wrapper
 
                 // Verify token / Get User

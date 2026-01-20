@@ -16,6 +16,7 @@ function DashboardLayout() {
 
     // Determine active tab from URL path (remove leading slash)
     // Default to 'dashboard' if root or empty
+    // Determine active tab from URL path (remove leading slash)
     const getTabFromPath = () => {
         const path = location.pathname.substring(1);
         return path || 'dashboard';
@@ -27,13 +28,10 @@ function DashboardLayout() {
 
     // Sync state with URL changes
     useEffect(() => {
-        setActiveTab(getTabFromPath());
+        setActiveTab(location.pathname.substring(1) || 'dashboard');
     }, [location.pathname]);
 
-    // Handle Tab Change (Navigate)
-    const handleTabChange = (tabId) => {
-        navigate(`/${tabId === 'dashboard' ? '' : tabId}`);
-    };
+    // Handle Tab Change (Navigate) - UNUSED REMOVED
 
     // Data States
     const [summaryData, setSummaryData] = useState(null);
