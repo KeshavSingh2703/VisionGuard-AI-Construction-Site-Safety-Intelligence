@@ -40,6 +40,8 @@ python-dotenv==1.0.0
 pyyaml==6.0.1
 python-multipart==0.0.6
 aiofiles==23.2.1
+fpdf==1.7.2
+lapx==0.5.5
 
 # Testing
 pytest==7.4.3
