@@ -9,6 +9,8 @@ from src.api.deps import get_current_user
 from src.pipeline.orchestrator import PipelineOrchestrator
 import logging
 
+from src.core.exceptions import ModelLoadError
+
 # Configure logger
 logger = logging.getLogger(__name__)
 
@@ -43,6 +45,11 @@ def run_pipeline(upload_id: str, path: str):
     try:
         orchestrator.process_video(path, video_id=upload_id)
         logger.info(f"Finished processing {upload_id}")
+    except ModelLoadError as mle:
+        logger.critical(f"ML Model Loading Failed for {upload_id}: {mle}")
+        # Could implicitly set status='failed' via orchestrator logic if it reached it, 
+        # but orchestrator might have failed early.
+        # We rely on orchestrator state handling for DB updates usually.
     except Exception as e:
         logger.error(f"Background processing failed for {upload_id}: {e}")
 
@@ -61,6 +68,12 @@ async def upload(
     - PDF: <= 50MB
     - Video: <= 100MB (mp4, mov, avi, mkv)
     """
+    if orchestrator is None:
+        raise HTTPException(
+            status_code=503, 
+            detail="ML Service Unavailable: Backend failed to initialize AI models."
+        )
+
     if not files or len(files) != 1:
         raise HTTPException(status_code=400, detail="Please upload exactly one file.")
 
