@@ -1,0 +1,45 @@
+database:
+  host: localhost
+  port: 5432
+  database: secureops
+  user: postgres
+  password: postgres
+  pool_size: 10
+  max_overflow: 20
+
+yolo:
+  model_path: models/yolov8n.pt
+  confidence_threshold: 0.25
+  device: auto # auto, cpu, cuda
+  classes: [0, 2, 5] # person, car, bus (adjust for PPE detection)
+
+embeddings:
+  provider: openai # openai, huggingface
+  model: text-embedding-3-small
+  dimension: 1536
+  batch_size: 32
+
+llm:
+  provider: openai # openai, anthropic
+  model: gpt-4-turbo-preview
+  temperature: 0.0
+  max_tokens: 2000
+
+vector_store:
+  table_name: document_vectors
+  similarity_threshold: 0.7
+  top_k: 5
+
+document_processing:
+  chunk_size: 1000
+  chunk_overlap: 200
+  pdf_clean: true
+
+video_processing:
+  frame_interval: 30 # Process every Nth frame
+  max_frames: 1000
+  sample_rate: 1.0
+
+logging:
+  level: INFO
+  format: json

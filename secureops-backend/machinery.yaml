@@ -1,0 +1,5 @@
+names:
+  0: excavator
+  1: dump_truck
+train: /Users/girijeshkumarsingh/Downloads/AI-Powered Construction Site Monitoring/secureops-backend/machinery_dataset/images/train
+val: /Users/girijeshkumarsingh/Downloads/AI-Powered Construction Site Monitoring/secureops-backend/machinery_dataset/images/val

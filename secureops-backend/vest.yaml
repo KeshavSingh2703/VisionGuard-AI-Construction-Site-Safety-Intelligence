@@ -1,0 +1,5 @@
+names:
+  0: vest
+  1: helmet
+train: /Users/girijeshkumarsingh/Downloads/AI-Powered Construction Site Monitoring/secureops-backend/data/vest_dataset/images/train
+val: /Users/girijeshkumarsingh/Downloads/AI-Powered Construction Site Monitoring/secureops-backend/data/vest_dataset/images/val

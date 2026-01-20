@@ -1,0 +1,40 @@
+name: SecureOps Frontend CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'secureops-frontend/**'
+
+jobs:
+  frontend-build:
+    name: Frontend Build Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./secureops-frontend
+
+    env:
+      VITE_API_URL: http://localhost:8000/api/v1
+      # Add other dummy envs if needed, but this is the critical one requested
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Use Node.js 18
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: './secureops-frontend/package-lock.json'
+        
+    - name: Install Dependencies
+      run: npm ci
+      
+    - name: Run Linter
+      run: npm run lint --if-present
+      
+    - name: Try Build
+      run: npm run build

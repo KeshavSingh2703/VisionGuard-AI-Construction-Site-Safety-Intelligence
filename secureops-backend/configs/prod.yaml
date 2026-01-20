@@ -1,0 +1,14 @@
+database:
+  pool_size: 20
+  max_overflow: 40
+
+yolo:
+  device: cuda
+  confidence_threshold: 0.3
+
+llm:
+  model: gpt-4-turbo-preview
+  temperature: 0.0
+
+logging:
+  level: INFO

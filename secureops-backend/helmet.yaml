@@ -1,0 +1,6 @@
+names:
+  0: helmet
+  1: no_helmet
+path: /Users/girijeshkumarsingh/Downloads/AI-Powered Construction Site Monitoring/secureops-backend/data/safety_dataset
+train: images/train
+val: images/val

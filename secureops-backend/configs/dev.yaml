@@ -1,0 +1,12 @@
+database:
+  database: secureops_dev
+
+yolo:
+  confidence_threshold: 0.2
+
+llm:
+  model: gpt-3.5-turbo
+  temperature: 0.1
+
+logging:
+  level: DEBUG
